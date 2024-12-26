@@ -10,6 +10,7 @@ interface TransaksiAttributes {
   bangunan: number;
   kamar: number;
   nominal: number;
+  periode_pembayaran: number;
   tgl_pembayaran: number;
 }
 
@@ -25,6 +26,7 @@ class Transaksi
   bangunan!: number;
   kamar!: number;
   nominal!: number;
+  periode_pembayaran!: number;
   tgl_pembayaran!: number;
 }
 
@@ -61,6 +63,10 @@ Transaksi.init(
     },
     nominal: {
       type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    periode_pembayaran: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     tgl_pembayaran: {

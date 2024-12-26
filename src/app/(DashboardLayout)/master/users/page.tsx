@@ -10,6 +10,7 @@ const nama = () => {
     { label: "No", value: "" },
     { label: "Nama", value: "nama" },
     { label: "Username", value: "username" },
+    { label: "Role", value: "role" },
     { label: "", value: "action" },
   ];
 

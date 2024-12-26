@@ -10,6 +10,7 @@ const Peraturan = () => {
     { label: "No", value: "" },
     { label: "Aturan", value: "aturan" },
     { label: "Bangunan", value: "bangunan" },
+    { label: "Fasilitas", value: "fasilitas" },
     { label: "", value: "action" },
   ];
 

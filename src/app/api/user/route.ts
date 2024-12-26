@@ -41,7 +41,7 @@ export async function GET(request: Request) {
 // Menangani permintaan POST untuk menambah data user
 export async function POST(request: Request) {
   try {
-    const { nama, username, password } = await request.json();
+    const { nama, username, password, role } = await request.json();
 
     // Cek data apakah ada username yang sama
     const dataUser = await User.findAll({
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     if (dataUser.length > 0) {
       return NextResponse.json({ data: "Username sudah ada" }, { status: 409 });
     } else {
-      const data = await User.create({ nama, username, password });
+      const data = await User.create({ nama, username, password, role });
       return NextResponse.json(data, { status: 201 });
     }
   } catch (error) {

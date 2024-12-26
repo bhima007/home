@@ -7,7 +7,6 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
-    const id = parseInt(url.searchParams.get("penyewaId") || "1", 10);
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
@@ -24,12 +23,9 @@ export async function GET(request: Request) {
     const dataBangunan = await Bangunan.findAll();
     const dataKamar = await Kamar.findAll();
     const data = await Transaksi.findAndCountAll({
-      where: {
-        penyewa: id,
-      },
       limit,
       offset,
-      order: [["id", "ASC"]],
+      order: [["id", "DESC"]],
     });
     return NextResponse.json({
       data: data.rows.map((r) => {
@@ -62,13 +58,20 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { penyewa, bangunan, kamar, nominal, tgl_pembayaran } =
-      await request.json();
+    const {
+      penyewa,
+      bangunan,
+      kamar,
+      nominal,
+      periode_pembayaran,
+      tgl_pembayaran,
+    } = await request.json();
     const data = await Transaksi.create({
       penyewa,
       bangunan,
       kamar,
       nominal,
+      periode_pembayaran,
       tgl_pembayaran,
     });
     return NextResponse.json(data, { status: 201 });

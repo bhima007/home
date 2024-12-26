@@ -26,7 +26,7 @@ export async function GET(request: Request) {
 export async function PUT(request: Request) {
   const url = new URL(request.url);
   const id = parseInt(url.pathname.split("/").pop() || "", 10);
-  const { aturan, bangunan } = await request.json();
+  const { aturan, bangunan, fasilitas } = await request.json();
 
   try {
     const data = await Peraturan.findByPk(id);
@@ -39,6 +39,7 @@ export async function PUT(request: Request) {
 
     data.bangunan = bangunan || data.bangunan;
     data.aturan = aturan || data.aturan;
+    data.fasilitas = fasilitas || data.fasilitas;
 
     await data.save();
     return NextResponse.json(data);

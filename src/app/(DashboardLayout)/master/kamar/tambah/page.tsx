@@ -21,6 +21,7 @@ export default () => {
 
   const [bangunan, setBangunan] = useState("");
   const [kamar, setKamar] = useState("");
+  const [jumlahPenghuni, setJumlahPenghuni] = useState("");
 
   const [listBangunan, setListBangunan] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,6 +48,7 @@ export default () => {
     const payload = {
       bangunan,
       kamar,
+      jumlah_penghuni: parseInt(jumlahPenghuni),
     };
     try {
       const response = await axios.post("/api/kamar", payload);
@@ -135,6 +137,31 @@ export default () => {
                 disabled={isLoading}
               ></InputBase>
             </Box>
+
+            <Box display="flex" flexDirection="column">
+              <Typography
+                variant="subtitle1"
+                component="label"
+                htmlFor="alamat"
+                mb="5px"
+              >
+                Jumlah Penghuni
+              </Typography>
+              <InputBase
+                sx={{
+                  border: "1px solid #648FFF",
+                  borderRadius: "50px",
+                  height: "38px",
+                  padding: "0px 14px",
+                }}
+                placeholder="Jumlah Penghuni"
+                fullWidth
+                value={jumlahPenghuni}
+                onChange={(e) => setJumlahPenghuni(e.target.value)}
+                type="number"
+                disabled={isLoading}
+              ></InputBase>
+            </Box>
           </Stack>
         </CardContent>
 
@@ -148,7 +175,14 @@ export default () => {
               sx={{ height: "35px", width: "100px" }}
               disableElevation
               onClick={() => createBangunan()}
-              disabled={bangunan == "" || kamar == "" || isLoading}
+              disabled={
+                bangunan == "" ||
+                kamar == "" ||
+                jumlahPenghuni == "" ||
+                parseInt(jumlahPenghuni) < 0 ||
+                parseInt(jumlahPenghuni) > 2 ||
+                isLoading
+              }
             >
               Kirim
             </Button>

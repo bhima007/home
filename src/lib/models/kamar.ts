@@ -6,6 +6,7 @@ interface KamarAttributes {
   id: number;
   bangunan: number;
   kamar: string;
+  jumlah_penghuni: number;
 }
 
 interface KamarCreationAttributes extends Optional<KamarAttributes, "id"> {}
@@ -17,6 +18,7 @@ class Kamar
   id!: number;
   bangunan!: number;
   kamar!: string;
+  jumlah_penghuni!: number;
 }
 
 Kamar.init(
@@ -36,6 +38,10 @@ Kamar.init(
     },
     kamar: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    jumlah_penghuni: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },

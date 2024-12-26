@@ -10,6 +10,7 @@ import { IconPencil, IconReceipt, IconSettings } from "@tabler/icons-react";
 import {
   Button,
   Card,
+  CardActions,
   CardContent,
   Chip,
   Divider,
@@ -47,7 +48,7 @@ export default function CustomTable({
     const showCell: any = [];
     for (let i = 0; i < HeaderItems.length - 2; i++) {
       showCell[i] = (
-        <TableCell key={HeaderItems[i + 1].value} style={{ maxWidth: "100px" }}>
+        <TableCell key={HeaderItems[i + 1].value} style={{ minWidth: "140px" }}>
           {HeaderItems[i + 1].value == "status" ? (
             <Chip
               label={data[HeaderItems[i + 1].value].toLowerCase()}
@@ -112,56 +113,52 @@ export default function CustomTable({
         </>
       )}
       <CardContent>
-        <div style={{ maxWidth: "100vw", overflow: "hidden" }}>
-          <TableContainer component={Paper} style={{ borderRadius: "0" }}>
-            <Table
-              sx={{ minWidth: 650 }}
-              size="small"
-              aria-label="a dense table"
-            >
-              <TableHead style={{ backgroundColor: "#5059B8" }}>
-                <TableRow>
-                  {HeaderItems.map((h: any, idx: number) => {
-                    return (
-                      <TableCell
-                        key={idx}
-                        style={{ color: "white", height: "60px" }}
-                      >
-                        {h.value == "action" ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                            }}
-                          >
-                            <IconSettings size={16}></IconSettings>
-                          </div>
-                        ) : (
-                          h.label
-                        )}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {DataItems.map((data: any, idx: number) => (
-                  <TableRow
-                    key={idx}
-                    sx={{
-                      minHeight: "35px",
-                      bgcolor: "#EEEEF9",
-                    }}
-                  >
-                    <TableCell sx={{ width: "40px", textAlign: "center" }}>
-                      {idx + 1}
+        <TableContainer style={{ borderRadius: "0" }}>
+          <Table size="small" aria-label="a dense table">
+            <TableHead style={{ backgroundColor: "#5059B8" }}>
+              <TableRow>
+                {HeaderItems.map((h: any, idx: number) => {
+                  return (
+                    <TableCell
+                      key={idx}
+                      style={{ color: "white", height: "60px" }}
+                    >
+                      {h.value == "action" ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <IconSettings size={16}></IconSettings>
+                        </div>
+                      ) : (
+                        h.label
+                      )}
                     </TableCell>
+                  );
+                })}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {DataItems.map((data: any, idx: number) => (
+                <TableRow
+                  key={idx}
+                  sx={{
+                    minHeight: "35px",
+                    bgcolor: "#EEEEF9",
+                  }}
+                >
+                  <TableCell sx={{ width: "40px", textAlign: "center" }}>
+                    {idx + 1}
+                  </TableCell>
 
-                    {dataShow(data, idx)}
+                  {dataShow(data, idx)}
 
-                    <TableCell>
-                      <Grid display="flex" justifyContent="center">
-                        <Tooltip title="Edit Data">
+                  <TableCell>
+                    <Grid display="flex" justifyContent="center">
+                      <Tooltip title="Edit Data">
+                        {title.toLowerCase() != "transaksi" && (
                           <IconButton
                             href={`/${
                               title.toLowerCase() == "pengaduan" ||
@@ -173,30 +170,27 @@ export default function CustomTable({
                           >
                             <IconPencil size={16}></IconPencil>
                           </IconButton>
-                        </Tooltip>
-                        {title.toLowerCase() == "penyewa" && (
-                          <Tooltip title="Transaksi">
-                            <IconButton
-                              href={`/master/penyewa/${data.id}/transaksi`}
-                            >
-                              <IconReceipt size={16}></IconReceipt>
-                            </IconButton>
-                          </Tooltip>
                         )}
-                      </Grid>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </div>
-        <Grid
-          container
-          justifyContent="space-between"
-          alignItems="center"
-          sx={{ mt: "20px" }}
-        >
+                      </Tooltip>
+                      {title.toLowerCase() == "penyewa" && (
+                        <Tooltip title="Transaksi">
+                          <IconButton
+                            href={`/master/penyewa/${data.id}/transaksi`}
+                          >
+                            <IconReceipt size={16}></IconReceipt>
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </Grid>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </CardContent>
+      <CardActions sx={{ px: "14px" }}>
+        <Grid container justifyContent="space-between" alignItems="center">
           <Typography>
             Total: <span>{DataItems.length}</span> Data {title}
           </Typography>
@@ -211,7 +205,7 @@ export default function CustomTable({
             disabled={isLoading}
           />
         </Grid>
-      </CardContent>
+      </CardActions>
     </Card>
   );
 }

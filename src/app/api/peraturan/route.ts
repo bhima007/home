@@ -48,10 +48,11 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { bangunan, aturan } = await request.json();
+    const { bangunan, aturan, fasilitas } = await request.json();
     const data = await Peraturan.create({
       bangunan,
       aturan,
+      fasilitas,
     });
     return NextResponse.json(data, { status: 201 });
   } catch (error) {

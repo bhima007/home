@@ -26,6 +26,7 @@ export default () => {
 
   const [aturan, setAturan] = useState("");
   const [bangunan, setBangunan] = useState("");
+  const [fasilitas, setFasilitas] = useState("");
 
   const [listBangunan, setListBangunan] = useState([]);
 
@@ -54,6 +55,7 @@ export default () => {
       }
       setAturan(data.aturan);
       setBangunan(data.bangunan);
+      setFasilitas(data.fasilitas);
     } catch (error) {
       console.error(error);
       setIsLoading(false);
@@ -80,6 +82,7 @@ export default () => {
     const payload = {
       aturan,
       bangunan,
+      fasilitas,
     };
 
     try {
@@ -97,7 +100,6 @@ export default () => {
 
   const actionDelete = async () => {
     setIsLoading(true);
-    
 
     try {
       const response = await axios.delete(`/api/peraturan/${id}`);
@@ -181,6 +183,25 @@ export default () => {
                 onChange={(e) => setAturan(e.target.value)}
               ></InputBase>
             </Box>
+
+            <Box display="flex" flexDirection="column">
+              <Typography variant="subtitle1" component="label" mb="5px">
+                Fasilitas
+              </Typography>
+              <InputBase
+                sx={{
+                  border: "1px solid #648FFF",
+                  borderRadius: "16px",
+                  padding: "4px 14px",
+                }}
+                placeholder="Fasilitas"
+                fullWidth
+                multiline
+                rows={4}
+                value={fasilitas}
+                onChange={(e) => setFasilitas(e.target.value)}
+              ></InputBase>
+            </Box>
           </Stack>
         </CardContent>
 
@@ -195,7 +216,11 @@ export default () => {
               disableElevation
               onClick={() => actionEdit()}
               disabled={
-                aturan == "" || bangunan == "" || aturan == "" || isLoading
+                aturan == "" ||
+                bangunan == "" ||
+                aturan == "" ||
+                fasilitas == "" ||
+                isLoading
               }
             >
               Kirim

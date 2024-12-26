@@ -9,6 +9,7 @@ interface PenyewaAttributes {
   bangunan: number;
   kamar: number;
   tgl_masuk: number;
+  no_darurat: string;
 }
 
 interface PenyewaCreationAttributes extends Optional<PenyewaAttributes, "id"> {}
@@ -22,6 +23,7 @@ class Penyewa
   bangunan!: number;
   kamar!: number;
   tgl_masuk!: number;
+  no_darurat!: string;
 }
 
 Penyewa.init(
@@ -53,6 +55,10 @@ Penyewa.init(
     },
     tgl_masuk: {
       type: DataTypes.DATE,
+      allowNull: false,
+    },
+    no_darurat: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },

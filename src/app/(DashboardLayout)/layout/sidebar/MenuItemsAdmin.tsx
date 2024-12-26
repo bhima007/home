@@ -23,6 +23,34 @@ const Menuitems = [
   },
   {
     navlabel: true,
+    subheader: "Master Data",
+  },
+  {
+    id: uniqueId(),
+    title: "Data Bangunan",
+    icon: IconBuilding,
+    href: "/master/bangunan",
+  },
+  {
+    id: uniqueId(),
+    title: "Data Kamar",
+    icon: IconHome,
+    href: "/master/kamar",
+  },
+  {
+    id: uniqueId(),
+    title: "Data Users",
+    icon: IconUsers,
+    href: "/master/users",
+  },
+  {
+    id: uniqueId(),
+    title: "Data Penyewa",
+    icon: IconFriends,
+    href: "/master/penyewa",
+  },
+  {
+    navlabel: true,
     subheader: "Transaksi",
   },
   {

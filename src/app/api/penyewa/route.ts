@@ -58,8 +58,15 @@ export async function GET(request: Request) {
 // Menangani permintaan POST untuk menambah data penyewa
 export async function POST(request: Request) {
   try {
-    const { nama, bangunan, kamar, tgl_masuk } = await request.json();
-    const data = await Penyewa.create({ nama, bangunan, kamar, tgl_masuk });
+    const { nama, bangunan, kamar, tgl_masuk, no_darurat } =
+      await request.json();
+    const data = await Penyewa.create({
+      nama,
+      bangunan,
+      kamar,
+      tgl_masuk,
+      no_darurat,
+    });
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
     console.error(error);

@@ -31,6 +31,7 @@ export default () => {
   const [bangunan, setBangunan] = useState("");
   const [kamar, setKamar] = useState("");
   const [tglMasuk, setTglMasuk] = useState<Dayjs | null>(null);
+  const [noDarurat, setNoDarurat] = useState("");
 
   const [listBangunan, setListBangunan] = useState([]);
   const [listKamar, setListKamar] = useState([]);
@@ -75,6 +76,7 @@ export default () => {
       bangunan,
       kamar,
       tgl_masuk: tglMasuk?.format("YYYY-MM-DD"),
+      no_darurat: noDarurat,
     };
 
     try {
@@ -210,6 +212,31 @@ export default () => {
                 htmlFor="alamat"
                 mb="5px"
               >
+                No Darurat
+              </Typography>
+              <InputBase
+                sx={{
+                  border: "1px solid #648FFF",
+                  borderRadius: "50px",
+                  height: "38px",
+                  padding: "0px 14px",
+                }}
+                placeholder="No Darurat"
+                fullWidth
+                value={noDarurat}
+                onChange={(e) => setNoDarurat(e.target.value)}
+                type="number"
+                disabled={isLoading}
+              ></InputBase>
+            </Box>
+
+            <Box display="flex" flexDirection="column">
+              <Typography
+                variant="subtitle1"
+                component="label"
+                htmlFor="alamat"
+                mb="5px"
+              >
                 Tanggal Masuk
               </Typography>
 
@@ -241,6 +268,7 @@ export default () => {
                 bangunan == "" ||
                 kamar == "" ||
                 tglMasuk == null ||
+                noDarurat == "" ||
                 isLoading
               }
             >

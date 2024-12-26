@@ -5,8 +5,9 @@ import Role from "./role";
 interface UserAttributes {
   id: number;
   nama: string;
-  username: number;
-  password: number;
+  username: string;
+  password: string;
+  role: string;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
@@ -17,8 +18,9 @@ class User
 {
   id!: number;
   nama!: string;
-  username!: number;
-  password!: number;
+  username!: string;
+  password!: string;
+  role!: string;
 }
 
 User.init(
@@ -37,6 +39,10 @@ User.init(
       allowNull: false,
     },
     password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
       type: DataTypes.STRING,
       allowNull: false,
     },

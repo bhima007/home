@@ -77,6 +77,7 @@ const AuthLogin = ({
               fullWidth
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              type="password"
               disabled={isLoading}
             ></InputBase>
           </Box>

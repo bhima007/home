@@ -8,57 +8,62 @@ export async function GET(request: Request) {
   try {
     const data = await Kamar.findByPk(id);
     if (!data) {
-      return NextResponse.json(
-        { error: "Kamar not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Kamar not found" }, { status: 404 });
     }
     return NextResponse.json(data);
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: "Error fetching kamar" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Error fetching kamar" },
+      { status: 500 }
+    );
   }
 }
-
 
 export async function PUT(request: Request) {
   const url = new URL(request.url);
   const id = parseInt(url.pathname.split("/").pop() || "", 10); // Ambil ID dari URL
-  const { bangunan, kamar } = await request.json();
+  const { bangunan, kamar, jumlah_penghuni } = await request.json();
 
   try {
     const data = await Kamar.findByPk(id);
     if (!data) {
-      return NextResponse.json({ error: 'Kamar not found' }, { status: 404 });
+      return NextResponse.json({ error: "Kamar not found" }, { status: 404 });
     }
 
     // Update kamar
     data.bangunan = bangunan || data.bangunan;
     data.kamar = kamar || data.kamar;
+    data.jumlah_penghuni = jumlah_penghuni || data.jumlah_penghuni;
 
     await data.save();
-    return NextResponse.json(kamar);
+    return NextResponse.json(data);
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Error updating kamar' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Error updating kamar" },
+      { status: 500 }
+    );
   }
 }
 
 export async function DELETE(request: Request) {
-  
   const url = new URL(request.url);
   const id = parseInt(url.pathname.split("/").pop() || "", 10);
 
   try {
     const data = await Kamar.findByPk(id);
     if (!data) {
-      return NextResponse.json({ error: 'Kamar not found' }, { status: 404 });
+      return NextResponse.json({ error: "Kamar not found" }, { status: 404 });
     }
 
     await data.destroy();
-    return NextResponse.json({ message: 'Kamar deleted successfully' });
+    return NextResponse.json({ message: "Kamar deleted successfully" });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Error deleting kamar' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Error deleting kamar" },
+      { status: 500 }
+    );
   }
 }
