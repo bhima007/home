@@ -54,8 +54,8 @@ export async function GET(request: Request) {
 // Menangani permintaan POST untuk menambah data kamar
 export async function POST(request: Request) {
   try {
-    const { bangunan, kamar } = await request.json();
-    const data = await Kamar.create({ bangunan, kamar });
+    const { bangunan, kamar, jumlah_penghuni } = await request.json();
+    const data = await Kamar.create({ bangunan, kamar, jumlah_penghuni });
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
     console.error(error);

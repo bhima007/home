@@ -22,15 +22,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import { MobileDatePicker } from "@mui/x-date-pickers";
 import CustomTable from "@/app/(DashboardLayout)/components/custom-table/table";
 
 export default () => {
-  const router = useRouter();
-  const { id } = useParams();
+  const [auth, setAuth] = useState<any>({});
 
   const [penyewa, setPenyewa] = useState("");
   const [bangunan, setBangunan] = useState("");
@@ -40,8 +39,13 @@ export default () => {
   const [periodePembayaran, setPeriodePembayaran] = useState(0);
   const [tglPembayaran, setTglPembayaran] = useState<Dayjs | null>(null);
 
+  const [listPenyewa, setListPenyewa] = useState([]);
+
   const HeaderItems = [
     { label: "No", value: "" },
+    { label: "Penyewa", value: "penyewa" },
+    { label: "Bangunan", value: "bangunan" },
+    { label: "Kamar", value: "kamar" },
     { label: "Nominal", value: "nominal" },
     { label: "Periode Pembayaran", value: "periodePembayaran" },
     { label: "Tanggal Pembayaran", value: "tglPembayaran" },
@@ -71,21 +75,40 @@ export default () => {
   };
 
   useEffect(() => {
-    getData();
-    getDataPenyewa();
-  }, []);
+    setAuth(JSON.parse(localStorage.getItem("userData")));
+    if (auth.nama) {
+      getData();
+      getListPenyewa();
+    }
+  }, [auth.nama]);
+  useEffect(() => {
+    if (penyewa) {
+      const selected = listPenyewa.filter((p) => {
+        return p.id == penyewa;
+      });
+      setBangunan(selected[0].bangunan);
+      setKamar(selected[0].kamar);
+    }
+  }, [penyewa]);
 
   const getData = async () => {
     try {
-      const response = await axios.get(
-        `/api/transaksi/${id}?page=${page}&limit=10`
-      );
+      let response;
+      if (auth.role == "ADMIN") {
+        response = await axios.get(`/api/transaksi?page=${page}&limit=10`);
+      } else {
+        response = await axios.get(
+          `/api/transaksi/${auth.id}?page=${page}&limit=10`
+        );
+      }
       const data = response.data;
-
       const dataItem: any = [];
       data.data.map((d: any) => {
         dataItem.push({
           ...d,
+          bangunan: d.bangunan.bangunan,
+          kamar: d.kamar.kamar,
+          penyewa: d.penyewa.nama,
           nominal: `Rp ${Intl.NumberFormat("id-ID").format(d.nominal)}`,
           periodePembayaran: d.periode_pembayaran,
           tglPembayaran: dayjs(d.tgl_pembayaran).format("DD-MMM-YYYY"),
@@ -96,14 +119,12 @@ export default () => {
     } catch (error) {}
   };
 
-  const getDataPenyewa = async () => {
+  const getListPenyewa = async () => {
     try {
-      const response = await axios.get(`/api/penyewa/${id}`);
+      const response = await axios.get(`/api/penyewa/list`);
       const data = response.data;
       if (data) {
-        setPenyewa(data.id);
-        setBangunan(data.bangunan);
-        setKamar(data.kamar);
+        setListPenyewa(data);
       }
     } catch (error) {
       console.error({ error });
@@ -134,16 +155,15 @@ export default () => {
   };
 
   const actionDelete = async () => {
-    setIsLoading(true);
-
-    try {
-      const response = await axios.delete(`/api/transaksi/${id}`);
-      setIsLoading(false);
-      router.push("/master/transaksi");
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-    }
+    // setIsLoading(true);
+    // try {
+    //   const response = await axios.delete(`/api/transaksi/${id}`);
+    //   setIsLoading(false);
+    //   router.push("/master/transaksi");
+    // } catch (error) {
+    //   console.error(error);
+    //   setIsLoading(false);
+    // }
   };
 
   const formatCurrency = (value) => {
@@ -162,26 +182,19 @@ export default () => {
             <Typography fontSize={16} fontWeight={700}>
               List Transaksi
             </Typography>
-            <Grid display="flex" gap={1}>
-              <Button
-                variant="contained"
-                color="primary"
-                disableElevation
-                href="/master/penyewa"
-              >
-                Kembali
-              </Button>
-
-              <Button
-                variant="contained"
-                disableElevation
-                color="secondary"
-                sx={{ color: "white" }}
-                onClick={handleOpenDialogCreate}
-              >
-                Tambah Data
-              </Button>
-            </Grid>
+            {auth.role == "ADMIN" && (
+              <Grid display="flex" gap={1}>
+                <Button
+                  variant="contained"
+                  disableElevation
+                  color="secondary"
+                  sx={{ color: "white" }}
+                  onClick={handleOpenDialogCreate}
+                >
+                  Tambah Data
+                </Button>
+              </Grid>
+            )}
           </Grid>
         </CardContent>
 
@@ -203,6 +216,41 @@ export default () => {
 
           <DialogContent>
             <Stack gap={2}>
+              <Box display="flex" flexDirection="column">
+                <Typography
+                  variant="subtitle1"
+                  component="label"
+                  htmlFor="alamat"
+                  mb="5px"
+                >
+                  Nama Penyewa
+                </Typography>
+
+                <select
+                  placeholder="Nama Penyewa"
+                  style={{
+                    border: "1px solid #648FFF",
+                    borderRadius: "50px",
+                    height: "38px",
+                    padding: "0px 14px",
+                    MozAppearance: "none",
+                    WebkitAppearance: "none",
+                    appearance: "none",
+                  }}
+                  value={penyewa}
+                  onChange={(e) => setPenyewa(e.target.value)}
+                >
+                  <option value="">Pilih Penyewa</option>
+                  {listPenyewa.map((list: any) => {
+                    return (
+                      <option value={list.id} key={list.id}>
+                        {list.nama}
+                      </option>
+                    );
+                  })}
+                </select>
+              </Box>
+
               <Box display="flex" flexDirection="column">
                 <Typography
                   variant="subtitle1"
@@ -255,7 +303,6 @@ export default () => {
                   onChange={(e) =>
                     setPeriodePembayaran(parseInt(e.target.value))
                   }
-                  type="number"
                   disabled={isLoading}
                 ></InputBase>
               </Box>

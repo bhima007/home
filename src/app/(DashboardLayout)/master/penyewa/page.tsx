@@ -10,9 +10,10 @@ const Bangunan = () => {
   const HeaderItems = [
     { label: "No", value: "" },
     { label: "Nama", value: "nama" },
-    { label: "Bangunan", value: "bangunan" },
-    { label: "Kamar", value: "kamar" },
+    { label: "Nama Bangunan", value: "bangunan" },
+    { label: "Nama Kamar", value: "kamar" },
     { label: "Tanggal Masuk", value: "tgl_masuk" },
+    { label: "No Darurat", value: "no_darurat" },
     { label: "", value: "action" },
   ];
 

@@ -22,14 +22,18 @@ export default () => {
   const [nama, setNama] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const listRole = ["ADMIN", "CLIENT"];
 
   const createUsers = async () => {
     const payload = {
       nama,
       username: username.replace(/\s+/g, ""),
       password,
+      role,
     };
     try {
       setIsLoading(true);
@@ -136,6 +140,41 @@ export default () => {
                 disabled={isLoading}
               ></InputBase>
             </Box>
+
+            <Box display="flex" flexDirection="column">
+              <Typography
+                variant="subtitle1"
+                component="label"
+                htmlFor="alamat"
+                mb="5px"
+              >
+                Role
+              </Typography>
+
+              <select
+                placeholder="Role"
+                style={{
+                  border: "1px solid #648FFF",
+                  borderRadius: "50px",
+                  height: "38px",
+                  padding: "0px 14px",
+                  MozAppearance: "none",
+                  WebkitAppearance: "none",
+                  appearance: "none",
+                }}
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="">Pilih Role</option>
+                {listRole.map((list: any) => {
+                  return (
+                    <option value={list} key={list}>
+                      {list}
+                    </option>
+                  );
+                })}
+              </select>
+            </Box>
           </Stack>
         </CardContent>
 
@@ -150,7 +189,11 @@ export default () => {
               disableElevation
               onClick={() => createUsers()}
               disabled={
-                username == "" || nama == "" || password == "" || isLoading
+                username == "" ||
+                nama == "" ||
+                password == "" ||
+                role == "" ||
+                isLoading
               }
             >
               Kirim

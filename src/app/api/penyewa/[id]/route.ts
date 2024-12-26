@@ -26,7 +26,7 @@ export async function GET(request: Request) {
 export async function PUT(request: Request) {
   const url = new URL(request.url);
   const id = parseInt(url.pathname.split("/").pop() || "", 10);
-  const { nama, bangunan, kamar, tgl_masuk } = await request.json();
+  const { nama, bangunan, kamar, tgl_masuk, no_darurat } = await request.json();
 
   try {
     const data = await Penyewa.findByPk(id);
@@ -38,6 +38,7 @@ export async function PUT(request: Request) {
     data.bangunan = bangunan || data.bangunan;
     data.kamar = kamar || data.kamar;
     data.tgl_masuk = tgl_masuk || data.tgl_masuk;
+    data.no_darurat = no_darurat || data.no_darurat;
 
     await data.save();
     return NextResponse.json(data);
@@ -51,7 +52,6 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  
   const url = new URL(request.url);
   const id = parseInt(url.pathname.split("/").pop() || "", 10);
 

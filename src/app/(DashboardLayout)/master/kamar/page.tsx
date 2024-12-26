@@ -9,7 +9,8 @@ const Bangunan = () => {
   const HeaderItems = [
     { label: "No", value: "" },
     { label: "Nama Bangunan", value: "bangunan" },
-    { label: "Kamar", value: "kamar" },
+    { label: "Nama Kamar", value: "kamar" },
+    { label: "Jumlah Penghuni", value: "jumlahPenghuni" },
     { label: "", value: "action" },
   ];
   const [DataItems, setDataItems] = useState([]);
@@ -29,10 +30,21 @@ const Bangunan = () => {
       if (data) {
         setIsLoading(false);
       }
+      console.log(data);
 
       const dataItem: any = [];
       data.data.map((d: any) => {
-        dataItem.push({ ...d, bangunan: d.bangunan.bangunan });
+        dataItem.push({
+          ...d,
+          bangunan: d.bangunan.bangunan,
+          jumlahPenghuni: (
+            <span
+              style={{ color: d.jumlah_penghuni / 2 == 1 ? "red" : "green" }}
+            >
+              {d.jumlah_penghuni}/2
+            </span>
+          ),
+        });
       });
       setDataItems(dataItem);
       setPage(page);

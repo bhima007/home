@@ -6,6 +6,7 @@ interface PeraturanAttributes {
   id: number;
   bangunan: number;
   aturan: string;
+  fasilitas: string;
 }
 
 interface PeraturanCreationAttributes
@@ -18,6 +19,7 @@ class Peraturan
   id!: number;
   bangunan!: number;
   aturan!: string;
+  fasilitas!: string;
 }
 
 Peraturan.init(
@@ -36,6 +38,10 @@ Peraturan.init(
       },
     },
     aturan: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    fasilitas: {
       type: DataTypes.STRING,
       allowNull: false,
     },
