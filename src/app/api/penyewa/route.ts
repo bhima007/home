@@ -1,6 +1,7 @@
 import Bangunan from "@/lib/models/bangunan";
 import Kamar from "@/lib/models/kamar";
 import Penyewa from "@/lib/models/penyewa";
+import User from "@/lib/models/user";
 import { NextResponse } from "next/server";
 
 // Menangani permintaan GET untuk mendapatkan data penyewa
@@ -22,6 +23,7 @@ export async function GET(request: Request) {
     // Hitung offset berdasarkan page dan limit
     const offset = (page - 1) * limit;
 
+    const dataUser = await User.findAll();
     const dataBangunan = await Bangunan.findAll();
     const dataKamar = await Kamar.findAll();
     const data = await Penyewa.findAndCountAll({
@@ -33,6 +35,9 @@ export async function GET(request: Request) {
       data: data.rows.map((r) => {
         return {
           ...r.dataValues,
+          nama: dataUser.filter((B) => {
+            return B.id == r.dataValues.nama;
+          })[0],
           bangunan: dataBangunan.filter((B) => {
             return B.id == r.dataValues.bangunan;
           })[0],

@@ -33,17 +33,31 @@ export default () => {
   const [tglMasuk, setTglMasuk] = useState<Dayjs | null>(null);
   const [noDarurat, setNoDarurat] = useState("");
 
+  const [listUser, setListUser] = useState([]);
   const [listBangunan, setListBangunan] = useState([]);
   const [listKamar, setListKamar] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    getListUser();
     getListBangunan();
   }, []);
   useEffect(() => {
     if (bangunan) getListKamar();
   }, [bangunan]);
+
+  const getListUser = async () => {
+    try {
+      const response = await axios.get("/api/user/list?role=CLIENT");
+      const data = response.data;
+      if (data) {
+        setListUser(data);
+      }
+    } catch (error) {
+      console.error({ error });
+    }
+  };
 
   const getListBangunan = async () => {
     try {
@@ -56,6 +70,7 @@ export default () => {
       console.error({ error });
     }
   };
+
   const getListKamar = async () => {
     try {
       const response = await axios.get(
@@ -119,21 +134,31 @@ export default () => {
                 htmlFor="alamat"
                 mb="5px"
               >
-                Nama
+                Nama Penyewa
               </Typography>
-              <InputBase
-                sx={{
+              <select
+                placeholder="Nama Nama"
+                style={{
                   border: "1px solid #648FFF",
                   borderRadius: "50px",
                   height: "38px",
                   padding: "0px 14px",
+                  MozAppearance: "none",
+                  WebkitAppearance: "none",
+                  appearance: "none",
                 }}
-                placeholder="Nama"
-                fullWidth
                 value={nama}
                 onChange={(e) => setNama(e.target.value)}
-                disabled={isLoading}
-              ></InputBase>
+              >
+                <option value="">Pilih Nama</option>
+                {listUser.map((list: any) => {
+                  return (
+                    <option value={list.id} key={list.id}>
+                      {list.nama}
+                    </option>
+                  );
+                })}
+              </select>
             </Box>
 
             <Box display="flex" flexDirection="column">
