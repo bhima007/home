@@ -42,7 +42,13 @@ export default function CustomTable({
   actionDelete?: any;
   noHeader?: boolean;
 }) {
+  const [auth, setAuth] = React.useState<any>({});
+
   const listStatus = ["SELESAI", "DALAM PROSES", "TINDAK LANJUT"];
+
+  React.useEffect(() => {
+    setAuth(JSON.parse(localStorage.getItem("userData")));
+  }, [auth.nama]);
 
   const dataShow = (data: any, idx: number) => {
     const showCell: any = [];
@@ -98,16 +104,18 @@ export default function CustomTable({
             <Typography fontSize={16} fontWeight={700}>
               List {title}
             </Typography>
-            <Button
-              variant="contained"
-              component={Link}
-              href={`${title.toLowerCase()}/tambah`}
-              disableElevation
-              color="secondary"
-              sx={{ color: "white" }}
-            >
-              Tambah Data
-            </Button>
+            {auth.role == "ADMIN" && (
+              <Button
+                variant="contained"
+                component={Link}
+                href={`${title.toLowerCase()}/tambah`}
+                disableElevation
+                color="secondary"
+                sx={{ color: "white" }}
+              >
+                Tambah Data
+              </Button>
+            )}
           </CardContent>
           <Divider />
         </>
@@ -123,7 +131,7 @@ export default function CustomTable({
                       key={idx}
                       style={{ color: "white", height: "60px" }}
                     >
-                      {h.value == "action" ? (
+                      {h.value == "action" && auth.role == "ADMIN" ? (
                         <div
                           style={{
                             display: "flex",
@@ -158,21 +166,22 @@ export default function CustomTable({
                   <TableCell>
                     <Grid display="flex" justifyContent="center">
                       <Tooltip title="Edit Data">
-                        {title.toLowerCase() != "transaksi" && (
-                          <IconButton
-                            href={`/${
-                              title.toLowerCase() == "pengaduan" ||
-                              title.toLowerCase() == "peraturan" ||
-                              title.toLowerCase() == "pengumuman"
-                                ? "pelayanan"
-                                : "master"
-                            }/${title.toLowerCase()}/${data.id}`}
-                          >
-                            <IconPencil size={16}></IconPencil>
-                          </IconButton>
-                        )}
+                        {title.toLowerCase() != "transaksi" &&
+                          auth.role == "ADMIN" && (
+                            <IconButton
+                              href={`/${
+                                title.toLowerCase() == "pengaduan" ||
+                                title.toLowerCase() == "peraturan" ||
+                                title.toLowerCase() == "pengumuman"
+                                  ? "pelayanan"
+                                  : "master"
+                              }/${title.toLowerCase()}/${data.id}`}
+                            >
+                              <IconPencil size={16}></IconPencil>
+                            </IconButton>
+                          )}
                       </Tooltip>
-                      {title.toLowerCase() == "penyewa" && (
+                      {/* {title.toLowerCase() == "penyewa" && (
                         <Tooltip title="Transaksi">
                           <IconButton
                             href={`/master/penyewa/${data.id}/transaksi`}
@@ -180,7 +189,7 @@ export default function CustomTable({
                             <IconReceipt size={16}></IconReceipt>
                           </IconButton>
                         </Tooltip>
-                      )}
+                      )} */}
                     </Grid>
                   </TableCell>
                 </TableRow>
@@ -189,6 +198,7 @@ export default function CustomTable({
           </Table>
         </TableContainer>
       </CardContent>
+
       <CardActions sx={{ px: "14px" }}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Typography>

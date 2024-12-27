@@ -2,10 +2,11 @@ import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../sequelize";
 import Kamar from "./kamar";
 import Bangunan from "./bangunan";
+import User from "./user";
 
 interface PenyewaAttributes {
   id: number;
-  nama: string;
+  nama: number;
   bangunan: number;
   kamar: number;
   tgl_masuk: number;
@@ -19,7 +20,7 @@ class Penyewa
   implements PenyewaAttributes
 {
   id!: number;
-  nama!: string;
+  nama!: number;
   bangunan!: number;
   kamar!: number;
   tgl_masuk!: number;
@@ -34,8 +35,12 @@ Penyewa.init(
       autoIncrement: true,
     },
     nama: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+      },
     },
     bangunan: {
       type: DataTypes.INTEGER,

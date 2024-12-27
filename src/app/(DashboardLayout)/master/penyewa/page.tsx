@@ -39,6 +39,7 @@ const Bangunan = () => {
       data.data.map((d: any) => {
         dataItem.push({
           ...d,
+          nama: d.nama.nama,
           bangunan: d.bangunan.bangunan,
           kamar: d.kamar.kamar,
           tgl_masuk: dayjs(d.tgl_masuk).format("D-MMM-YYYY"),

@@ -77,17 +77,19 @@ export default () => {
   useEffect(() => {
     setAuth(JSON.parse(localStorage.getItem("userData")));
     if (auth.nama) {
-      getData();
       getListPenyewa();
     }
   }, [auth.nama]);
+  useEffect(() => {
+    if (listPenyewa && auth.id) getData();
+  }, [listPenyewa]);
   useEffect(() => {
     if (penyewa) {
       const selected = listPenyewa.filter((p) => {
         return p.id == penyewa;
       });
-      setBangunan(selected[0].bangunan);
-      setKamar(selected[0].kamar);
+      setBangunan(selected[0].bangunan.id);
+      setKamar(selected[0].kamar.id);
     }
   }, [penyewa]);
 
@@ -97,8 +99,11 @@ export default () => {
       if (auth.role == "ADMIN") {
         response = await axios.get(`/api/transaksi?page=${page}&limit=10`);
       } else {
+        const penyewaId = listPenyewa.filter((U) => {
+          return U.nama.id == auth.id;
+        })[0].id;
         response = await axios.get(
-          `/api/transaksi/${auth.id}?page=${page}&limit=10`
+          `/api/transaksi/${penyewaId}?page=${page}&limit=10`
         );
       }
       const data = response.data;
@@ -108,12 +113,15 @@ export default () => {
           ...d,
           bangunan: d.bangunan.bangunan,
           kamar: d.kamar.kamar,
-          penyewa: d.penyewa.nama,
+          penyewa: listPenyewa.filter((P) => {
+            return P.nama.id == d.penyewa.nama;
+          })[0].nama.nama,
           nominal: `Rp ${Intl.NumberFormat("id-ID").format(d.nominal)}`,
           periodePembayaran: d.periode_pembayaran,
           tglPembayaran: dayjs(d.tgl_pembayaran).format("DD-MMM-YYYY"),
         });
       });
+
       setDataItems(dataItem);
       setTotalPages(data.totalPages);
     } catch (error) {}
@@ -122,7 +130,7 @@ export default () => {
   const getListPenyewa = async () => {
     try {
       const response = await axios.get(`/api/penyewa/list`);
-      const data = response.data;
+      const data = response.data.data;
       if (data) {
         setListPenyewa(data);
       }
@@ -244,7 +252,7 @@ export default () => {
                   {listPenyewa.map((list: any) => {
                     return (
                       <option value={list.id} key={list.id}>
-                        {list.nama}
+                        {list.nama.nama}
                       </option>
                     );
                   })}

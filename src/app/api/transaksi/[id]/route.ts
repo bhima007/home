@@ -2,6 +2,7 @@ import Bangunan from "@/lib/models/bangunan";
 import Kamar from "@/lib/models/kamar";
 import Penyewa from "@/lib/models/penyewa";
 import Transaksi from "@/lib/models/transaksi";
+import User from "@/lib/models/user";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -13,9 +14,10 @@ export async function GET(request: Request) {
   try {
     const offset = (page - 1) * limit;
 
-    const dataPenyewa = await Transaksi.findAll();
-    const dataBangunan = await Transaksi.findAll();
-    const dataKamar = await Transaksi.findAll();
+    const dataUser = await User.findByPk(id);
+    const dataPenyewa = await Penyewa.findAll();
+    const dataBangunan = await Bangunan.findAll();
+    const dataKamar = await Kamar.findAll();
     const data = await Transaksi.findAndCountAll({
       where: {
         penyewa: id,
@@ -29,6 +31,7 @@ export async function GET(request: Request) {
       data: data.rows.map((r) => {
         return {
           ...r.dataValues,
+          user: dataUser,
           penyewa: dataPenyewa.filter((P) => {
             return P.id == r.dataValues.penyewa;
           })[0],

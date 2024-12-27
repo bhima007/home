@@ -1,19 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Menuitems from "./MenuItems";
 import MenuitemsAdmin from "./MenuItemsAdmin";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Box, List } from "@mui/material";
 import NavItem from "./NavItem";
 import NavGroup from "./NavGroup/NavGroup";
 
 const SidebarItems = ({ toggleMobileSidebar }: any) => {
+  const router = useRouter();
+
   const pathname = usePathname();
   const pathDirect = pathname;
-  const auth = JSON.parse(localStorage.getItem("userData"));
+  const [auth, setAuth] = React.useState({ role: "" });
 
   useEffect(() => {
-    console.log({ auth });
-  }, [auth]);
+    const data = JSON.parse(localStorage.getItem("userData"));
+    if (data) {
+      setAuth(data);
+    } else {
+      router.push("/authentication/login");
+    }
+  }, []);
 
   return (
     <Box sx={{ px: 3 }}>
