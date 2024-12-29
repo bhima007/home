@@ -219,7 +219,6 @@ export default () => {
                 aturan == "" ||
                 bangunan == "" ||
                 aturan == "" ||
-                fasilitas == "" ||
                 isLoading
               }
             >

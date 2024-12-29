@@ -25,6 +25,7 @@ import Link from "next/link";
 export default function CustomTable({
   title,
   page,
+  totalItems,
   totalPages,
   isLoading,
   HeaderItems,
@@ -35,6 +36,7 @@ export default function CustomTable({
 }: {
   title: any;
   page?: any;
+  totalItems?: any;
   totalPages?: any;
   isLoading?: boolean;
   HeaderItems: any;
@@ -214,7 +216,7 @@ export default function CustomTable({
       <CardActions sx={{ px: "14px" }}>
         <Grid container justifyContent="space-between" alignItems="center">
           <Typography>
-            Total: <span>{DataItems.length}</span> Data {title}
+            Total: <span>{totalItems}</span> Data {title}
           </Typography>
 
           <Pagination

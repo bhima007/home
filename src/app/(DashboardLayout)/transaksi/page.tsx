@@ -47,7 +47,7 @@ export default () => {
     { label: "Bangunan", value: "bangunan" },
     { label: "Kamar", value: "kamar" },
     { label: "Nominal", value: "nominal" },
-    { label: "Periode Pembayaran", value: "periodePembayaran" },
+    { label: "Periode Pembayaran (Bulan)", value: "periodePembayaran" },
     { label: "Tanggal Pembayaran", value: "tglPembayaran" },
     { label: "", value: "action" },
   ];
@@ -56,6 +56,7 @@ export default () => {
   const [DataItems, setDataItems] = useState([]);
 
   const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -154,6 +155,7 @@ export default () => {
       });
       setDataRaw(data.data);
       setDataItems(dataItem);
+      setTotalItems(data.total);
       setTotalPages(data.totalPages);
     } catch (error) {}
   };
@@ -206,6 +208,7 @@ export default () => {
       if (response) {
         setIsLoading(false);
         handleCloseDialogCreate();
+        handleCloseDialogDelete();
         getData();
       }
     } catch (error) {
@@ -253,6 +256,7 @@ export default () => {
           page={page}
           setPage={setPage}
           isLoading={isLoading}
+          totalItems={totalItems}
           totalPages={totalPages}
           HeaderItems={HeaderItems}
           DataItems={DataItems}

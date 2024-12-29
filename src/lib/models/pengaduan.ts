@@ -48,7 +48,7 @@ Pengaduan.init(
     },
     kamar: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: Pengaduan,
         key: "id",

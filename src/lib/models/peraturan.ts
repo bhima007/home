@@ -43,7 +43,7 @@ Peraturan.init(
     },
     fasilitas: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {

@@ -190,7 +190,7 @@ export default () => {
               ></InputBase>
             </Box>
 
-            <Box display="flex" flexDirection="column">
+            {/* <Box display="flex" flexDirection="column">
               <Typography
                 variant="subtitle1"
                 component="label"
@@ -223,7 +223,7 @@ export default () => {
                   );
                 })}
               </select>
-            </Box>
+            </Box> */}
           </Stack>
         </CardContent>
 

@@ -39,13 +39,12 @@ export default () => {
 
   useEffect(() => {
     setAuth(JSON.parse(localStorage.getItem("userData")));
-    setNama(auth.nama);
     if (auth.Penyewa) {
+      setNama(auth.nama);
       setBangunan(auth.Penyewa.bangunan);
       setKamar(auth.Penyewa.kamar);
     }
     setStatus("1");
-    console.log(auth);
   }, [auth.nama]);
   useEffect(() => {
     getListBangunan();
@@ -278,7 +277,6 @@ export default () => {
               disabled={
                 nama == "" ||
                 bangunan == "" ||
-                kamar == "" ||
                 pengaduan == "" ||
                 status == "" ||
                 isLoading
@@ -292,11 +290,15 @@ export default () => {
               sx={{ height: "35px", width: "100px" }}
               disableElevation
               onClick={() => {
-                setNama("");
-                setBangunan("");
-                setKamar("");
-                setPengaduan("");
-                setStatus("");
+                if (auth.role == "ADMIN") {
+                  setNama("");
+                  setBangunan("");
+                  setKamar("");
+                  setPengaduan("");
+                  setStatus("");
+                } else {
+                  setPengaduan("");
+                }
               }}
             >
               Reset

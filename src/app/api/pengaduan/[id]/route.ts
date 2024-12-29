@@ -39,7 +39,7 @@ export async function PUT(request: Request) {
 
     data.nama = nama || data.nama;
     data.bangunan = bangunan || data.bangunan;
-    data.kamar = kamar || data.kamar;
+    data.kamar = kamar || null;
     data.pengaduan = pengaduan || data.pengaduan;
     data.status = status || data.status;
 

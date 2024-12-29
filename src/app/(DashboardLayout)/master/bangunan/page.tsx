@@ -15,6 +15,7 @@ const Bangunan = () => {
   ];
   const [DataItems, setDataItems] = useState([]);
   const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,6 +32,7 @@ const Bangunan = () => {
       }
       setDataItems(response.data.data);
       setPage(response.data.page);
+      setTotalItems(response.data.total);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error(error);
@@ -46,6 +48,7 @@ const Bangunan = () => {
         setPage={setPage}
         isLoading={isLoading}
         totalPages={totalPages}
+        totalItems={totalItems}
         HeaderItems={HeaderItems}
         DataItems={DataItems}
       ></CustomTable>
