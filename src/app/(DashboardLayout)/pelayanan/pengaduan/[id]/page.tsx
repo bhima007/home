@@ -24,6 +24,8 @@ export default () => {
   const router = useRouter();
   const { id } = useParams();
 
+  const [auth, setAuth] = useState<any>({});
+
   const [nama, setNama] = useState("");
   const [bangunan, setBangunan] = useState("");
   const [kamar, setKamar] = useState("");
@@ -50,6 +52,9 @@ export default () => {
   };
 
   useEffect(() => {
+    setAuth(JSON.parse(localStorage.getItem("userData")));
+  }, [auth.nama]);
+  useEffect(() => {
     getData();
   }, []);
 
@@ -64,7 +69,7 @@ export default () => {
 
       setNama(data.nama);
       setBangunan(data.bangunan);
-      setKamar(data.kamar);
+      setKamar(data.kamar || "");
       setPengaduan(data.pengaduan);
       setStatus(listStatus.indexOf(data.status).toString());
     } catch (error) {
@@ -129,7 +134,6 @@ export default () => {
 
   const actionDelete = async () => {
     setIsLoading(true);
-    
 
     try {
       const response = await axios.delete(`/api/pengaduan/${id}`);
@@ -176,6 +180,7 @@ export default () => {
                 fullWidth
                 value={nama}
                 onChange={(e) => setNama(e.target.value)}
+                disabled
               ></InputBase>
             </Box>
 
@@ -201,6 +206,7 @@ export default () => {
                 }}
                 value={bangunan}
                 onChange={(e) => setBangunan(e.target.value)}
+                disabled
               >
                 <option value="">Pilih Bangunan</option>
                 {listBangunan.map((list: any) => {
@@ -235,7 +241,7 @@ export default () => {
                 }}
                 value={kamar}
                 onChange={(e) => setKamar(e.target.value)}
-                disabled={bangunan.length == 0}
+                disabled
               >
                 <option value="">Pilih Kamar</option>
                 {listKamar.map((list: any) => {
@@ -264,6 +270,7 @@ export default () => {
                 rows={4}
                 value={pengaduan}
                 onChange={(e) => setPengaduan(e.target.value)}
+                disabled
               ></InputBase>
             </Box>
 
@@ -319,7 +326,7 @@ export default () => {
             >
               Kirim
             </Button>
-            <Button
+            {/* <Button
               variant="contained"
               color="error"
               sx={{ height: "35px", width: "100px" }}
@@ -327,7 +334,7 @@ export default () => {
               onClick={handleOpenDialog}
             >
               Hapus
-            </Button>
+            </Button> */}
           </Box>
         </CardContent>
       </Card>

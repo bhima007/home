@@ -18,6 +18,7 @@ const Pengaduan = () => {
 
   const [DataItems, setDataItems] = useState([]);
   const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,11 +40,12 @@ const Pengaduan = () => {
         dataItem.push({
           ...d,
           bangunan: d.bangunan.bangunan,
-          kamar: d.kamar.kamar,
+          kamar: d.kamar ? d.kamar.kamar : "-",
         });
       });
       setDataItems(dataItem);
       setPage(response.data.page);
+      setTotalItems(response.data.total);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error(error);
@@ -57,6 +59,7 @@ const Pengaduan = () => {
         page={page}
         setPage={setPage}
         isLoading={isLoading}
+        totalItems={totalItems}
         totalPages={totalPages}
         HeaderItems={HeaderItems}
         DataItems={DataItems}

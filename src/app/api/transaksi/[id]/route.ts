@@ -60,8 +60,14 @@ export async function GET(request: Request) {
 export async function PUT(request: Request) {
   const url = new URL(request.url);
   const id = parseInt(url.pathname.split("/").pop() || "", 10);
-  const { penyewa, bangunan, kamar, nominal, tgl_pembayaran } =
-    await request.json();
+  const {
+    penyewa,
+    bangunan,
+    kamar,
+    nominal,
+    periode_pembayaran,
+    tgl_pembayaran,
+  } = await request.json();
 
   try {
     const data = await Transaksi.findByPk(id);
@@ -76,6 +82,7 @@ export async function PUT(request: Request) {
     data.bangunan = bangunan || data.bangunan;
     data.kamar = kamar || data.kamar;
     data.nominal = nominal || data.nominal;
+    data.periode_pembayaran = periode_pembayaran || data.periode_pembayaran;
     data.tgl_pembayaran = tgl_pembayaran || data.tgl_pembayaran;
 
     await data.save();

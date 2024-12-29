@@ -57,7 +57,7 @@ export async function POST(request: Request) {
     const data = await Pengaduan.create({
       nama,
       bangunan,
-      kamar,
+      kamar: kamar || null,
       pengaduan,
       status,
     });
