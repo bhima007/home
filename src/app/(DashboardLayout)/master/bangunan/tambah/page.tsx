@@ -13,9 +13,12 @@ import {
   InputBase,
 } from "@mui/material";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default () => {
+  const router = useRouter();
+
   const [lokasi, setLokasi] = useState("");
   const [bangunan, setBangunan] = useState("");
   const [alamat, setAlamat] = useState("");
@@ -29,8 +32,7 @@ export default () => {
 
     try {
       const response = await axios.post("/api/bangunan", payload);
-      console.log({ response });
-      // setUsers(response.data);
+      router.push("/master/bangunan");
     } catch (error) {
       console.error({ error });
     }

@@ -1,3 +1,4 @@
+import Penyewa from "@/lib/models/penyewa";
 import User from "@/lib/models/user";
 import { NextResponse } from "next/server";
 
@@ -9,6 +10,9 @@ export async function POST(request: Request) {
       where: {
         username,
         password,
+      },
+      include: {
+        model: Penyewa,
       },
     });
 

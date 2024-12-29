@@ -36,7 +36,7 @@ export default () => {
   const [kamar, setKamar] = useState("");
   const [nominalShow, setNominalShow] = useState("");
   const [nominal, setNominal] = useState(0);
-  const [periodePembayaran, setPeriodePembayaran] = useState(0);
+  const [periodePembayaran, setPeriodePembayaran] = useState("");
   const [tglPembayaran, setTglPembayaran] = useState<Dayjs | null>(null);
 
   const [listPenyewa, setListPenyewa] = useState([]);
@@ -52,6 +52,7 @@ export default () => {
     { label: "", value: "action" },
   ];
 
+  const [DataRaw, setDataRaw] = useState([]);
   const [DataItems, setDataItems] = useState([]);
 
   const [page, setPage] = useState(1);
@@ -59,12 +60,39 @@ export default () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [dialogCreate, setDialogCreate] = useState(false);
+  const [dialogEdit, setDialogEdit] = useState(null);
   const [dialogDelete, setDialogDelete] = useState(false);
+
+  useEffect(() => {
+    if (dialogEdit) {
+      const data: any = DataRaw.filter((data) => {
+        return data.id == dialogEdit;
+      })[0];
+      if (data) {
+        setPenyewa(data.penyewa.id);
+        setBangunan(data.bangunan.id);
+        setKamar(data.kamar.id);
+        setNominal(data.nominal);
+        formatCurrency(`${parseInt(data.nominal)}`);
+        setPeriodePembayaran(data.periode_pembayaran);
+        setTglPembayaran(dayjs(data.tgl_pembayaran));
+        setDialogCreate(true);
+      }
+    }
+  }, [dialogEdit]);
 
   const handleOpenDialogCreate = () => {
     setDialogCreate(true);
   };
   const handleCloseDialogCreate = () => {
+    setPenyewa("");
+    setBangunan("");
+    setKamar("");
+    setNominalShow("");
+    setNominal(0);
+    setPeriodePembayaran("");
+    setTglPembayaran(null);
+    setDialogEdit(null);
     setDialogCreate(false);
   };
   const handleOpenDialogDelete = () => {
@@ -74,6 +102,9 @@ export default () => {
     setDialogDelete(false);
   };
 
+  useEffect(() => {
+    getData();
+  }, [page]);
   useEffect(() => {
     setAuth(JSON.parse(localStorage.getItem("userData")));
     if (auth.nama) {
@@ -121,7 +152,7 @@ export default () => {
           tglPembayaran: dayjs(d.tgl_pembayaran).format("DD-MMM-YYYY"),
         });
       });
-
+      setDataRaw(data.data);
       setDataItems(dataItem);
       setTotalPages(data.totalPages);
     } catch (error) {}
@@ -145,16 +176,22 @@ export default () => {
       bangunan,
       kamar,
       nominal,
-      periode_pembayaran: periodePembayaran,
+      periode_pembayaran: parseInt(periodePembayaran),
       tgl_pembayaran: tglPembayaran?.format("YYYY-MM-DD"),
     };
 
     try {
       setIsLoading(true);
-      const response = await axios.post("/api/transaksi", payload);
+      let response: any;
+      if (dialogEdit) {
+        response = await axios.put(`/api/transaksi/${dialogEdit}`, payload);
+      } else {
+        response = await axios.post("/api/transaksi", payload);
+      }
       if (response) {
         setIsLoading(false);
         handleCloseDialogCreate();
+        handleCloseDialogDelete();
         getData();
       }
     } catch (error) {
@@ -163,20 +200,23 @@ export default () => {
   };
 
   const actionDelete = async () => {
-    // setIsLoading(true);
-    // try {
-    //   const response = await axios.delete(`/api/transaksi/${id}`);
-    //   setIsLoading(false);
-    //   router.push("/master/transaksi");
-    // } catch (error) {
-    //   console.error(error);
-    //   setIsLoading(false);
-    // }
+    setIsLoading(true);
+    try {
+      const response = await axios.delete(`/api/transaksi/${dialogEdit}`);
+      if (response) {
+        setIsLoading(false);
+        handleCloseDialogCreate();
+        getData();
+      }
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
   };
 
   const formatCurrency = (value) => {
     value = value.replace(/[^0-9]/g, "");
-    setNominal(parseInt(value));
+    setNominal(parseFloat(value));
 
     value = new Intl.NumberFormat("id-ID").format(value);
     setNominalShow("Rp " + value);
@@ -217,6 +257,7 @@ export default () => {
           HeaderItems={HeaderItems}
           DataItems={DataItems}
           noHeader={true}
+          setDialogEdit={setDialogEdit}
         ></CustomTable>
 
         <Dialog open={dialogCreate} maxWidth="md" fullWidth>
@@ -308,9 +349,8 @@ export default () => {
                   placeholder="Periode Pembayaran"
                   fullWidth
                   value={periodePembayaran}
-                  onChange={(e) =>
-                    setPeriodePembayaran(parseInt(e.target.value))
-                  }
+                  onChange={(e) => setPeriodePembayaran(e.target.value)}
+                  type="number"
                   disabled={isLoading}
                 ></InputBase>
               </Box>
@@ -341,6 +381,16 @@ export default () => {
           </DialogContent>
 
           <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
+            {dialogEdit && (
+              <Button
+                variant="outlined"
+                color="error"
+                sx={{ width: "120px" }}
+                onClick={handleOpenDialogDelete}
+              >
+                Hapus
+              </Button>
+            )}
             <Button
               variant="outlined"
               sx={{ width: "120px" }}

@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     const data = await Pengaduan.findAndCountAll({
       limit,
       offset,
-      order: [["id", "ASC"]],
+      order: [["id", "DESC"]],
     });
     return NextResponse.json({
       data: data.rows.map((r) => {
