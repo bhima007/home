@@ -47,8 +47,8 @@ const Bangunan = () => {
         });
       });
       setDataItems(dataItem);
-      setPage(page);
-      setTotalPages(totalPages);
+      setPage(response.data.page);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error(error);
       setIsLoading(false);

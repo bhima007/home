@@ -19,6 +19,8 @@ import { useEffect, useState } from "react";
 export default () => {
   const router = useRouter();
 
+  const [auth, setAuth] = useState<any>({});
+
   const [nama, setNama] = useState("");
   const [bangunan, setBangunan] = useState("");
   const [kamar, setKamar] = useState("");
@@ -35,6 +37,16 @@ export default () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    setAuth(JSON.parse(localStorage.getItem("userData")));
+    setNama(auth.nama);
+    if (auth.Penyewa) {
+      setBangunan(auth.Penyewa.bangunan);
+      setKamar(auth.Penyewa.kamar);
+    }
+    setStatus("1");
+    console.log(auth);
+  }, [auth.nama]);
   useEffect(() => {
     getListBangunan();
   }, []);
@@ -75,6 +87,7 @@ export default () => {
       pengaduan,
       status: listStatus[status],
     };
+    // console.log({ payload });
 
     try {
       setIsLoading(true);
@@ -110,93 +123,96 @@ export default () => {
 
         <CardContent>
           <Stack gap={2}>
-            <Box display="flex" flexDirection="column">
-              <Typography variant="subtitle1" component="label" mb="5px">
-                Nama
-              </Typography>
-              <InputBase
-                sx={{
-                  border: "1px solid #648FFF",
-                  borderRadius: "50px",
-                  height: "38px",
-                  padding: "0px 14px",
-                }}
-                placeholder="Nama"
-                fullWidth
-                value={nama}
-                onChange={(e) => setNama(e.target.value)}
-              ></InputBase>
-            </Box>
+            {auth.role == "ADMIN" && (
+              <>
+                <Box display="flex" flexDirection="column">
+                  <Typography variant="subtitle1" component="label" mb="5px">
+                    Nama
+                  </Typography>
+                  <InputBase
+                    sx={{
+                      border: "1px solid #648FFF",
+                      borderRadius: "50px",
+                      height: "38px",
+                      padding: "0px 14px",
+                    }}
+                    placeholder="Nama"
+                    fullWidth
+                    value={nama}
+                    onChange={(e) => setNama(e.target.value)}
+                  ></InputBase>
+                </Box>
 
-            <Box display="flex" flexDirection="column">
-              <Typography
-                variant="subtitle1"
-                component="label"
-                htmlFor="alamat"
-                mb="5px"
-              >
-                Bangunan
-              </Typography>
-              <select
-                placeholder="Nama Bangunan"
-                style={{
-                  border: "1px solid #648FFF",
-                  borderRadius: "50px",
-                  height: "38px",
-                  padding: "0px 14px",
-                  MozAppearance: "none",
-                  WebkitAppearance: "none",
-                  appearance: "none",
-                }}
-                value={bangunan}
-                onChange={(e) => setBangunan(e.target.value)}
-              >
-                <option value="">Pilih Bangunan</option>
-                {listBangunan.map((list: any) => {
-                  return (
-                    <option value={list.id} key={list.id}>
-                      {list.bangunan}
-                    </option>
-                  );
-                })}
-              </select>
-            </Box>
+                <Box display="flex" flexDirection="column">
+                  <Typography
+                    variant="subtitle1"
+                    component="label"
+                    htmlFor="alamat"
+                    mb="5px"
+                  >
+                    Bangunan
+                  </Typography>
+                  <select
+                    placeholder="Nama Bangunan"
+                    style={{
+                      border: "1px solid #648FFF",
+                      borderRadius: "50px",
+                      height: "38px",
+                      padding: "0px 14px",
+                      MozAppearance: "none",
+                      WebkitAppearance: "none",
+                      appearance: "none",
+                    }}
+                    value={bangunan}
+                    onChange={(e) => setBangunan(e.target.value)}
+                  >
+                    <option value="">Pilih Bangunan</option>
+                    {listBangunan.map((list: any) => {
+                      return (
+                        <option value={list.id} key={list.id}>
+                          {list.bangunan}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </Box>
 
-            <Box display="flex" flexDirection="column">
-              <Typography
-                variant="subtitle1"
-                component="label"
-                htmlFor="alamat"
-                mb="5px"
-              >
-                Kamar
-              </Typography>
-              <select
-                placeholder="Nama Bangunan"
-                style={{
-                  border: "1px solid #648FFF",
-                  borderRadius: "50px",
-                  height: "38px",
-                  padding: "0px 14px",
-                  MozAppearance: "none",
-                  WebkitAppearance: "none",
-                  appearance: "none",
-                }}
-                value={kamar}
-                onChange={(e) => setKamar(e.target.value)}
-                disabled={bangunan.length == 0}
-              >
-                <option value="">Pilih Kamar</option>
-                {listKamar.map((list: any) => {
-                  return (
-                    <option value={list.id} key={list.id}>
-                      {list.kamar}
-                    </option>
-                  );
-                })}
-              </select>
-            </Box>
-
+                <Box display="flex" flexDirection="column">
+                  <Typography
+                    variant="subtitle1"
+                    component="label"
+                    htmlFor="alamat"
+                    mb="5px"
+                  >
+                    Kamar
+                  </Typography>
+                  <select
+                    placeholder="Nama Bangunan"
+                    style={{
+                      border: "1px solid #648FFF",
+                      borderRadius: "50px",
+                      height: "38px",
+                      padding: "0px 14px",
+                      MozAppearance: "none",
+                      WebkitAppearance: "none",
+                      appearance: "none",
+                    }}
+                    value={kamar}
+                    onChange={(e) => setKamar(e.target.value)}
+                    disabled={bangunan.length == 0}
+                  >
+                    <option value="">Pilih Kamar</option>
+                    {listKamar.map((list: any) => {
+                      return (
+                        <option value={list.id} key={list.id}>
+                          {list.kamar}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </Box>
+              </>
+            )}
             <Box display="flex" flexDirection="column">
               <Typography variant="subtitle1" component="label" mb="5px">
                 Pengaduan
@@ -216,34 +232,36 @@ export default () => {
               ></InputBase>
             </Box>
 
-            <Box display="flex" flexDirection="column">
-              <Typography variant="subtitle1" component="label" mb="5px">
-                Status
-              </Typography>
-              <select
-                placeholder="Status"
-                style={{
-                  border: "1px solid #648FFF",
-                  borderRadius: "50px",
-                  height: "38px",
-                  padding: "0px 14px",
-                  MozAppearance: "none",
-                  WebkitAppearance: "none",
-                  appearance: "none",
-                }}
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option value="">Pilih Status</option>
-                {listStatus.map((list: any, idx: number) => {
-                  return (
-                    <option value={idx} key={idx}>
-                      {list}
-                    </option>
-                  );
-                })}
-              </select>
-            </Box>
+            {auth.role == "ADMIN" && (
+              <Box display="flex" flexDirection="column">
+                <Typography variant="subtitle1" component="label" mb="5px">
+                  Status
+                </Typography>
+                <select
+                  placeholder="Status"
+                  style={{
+                    border: "1px solid #648FFF",
+                    borderRadius: "50px",
+                    height: "38px",
+                    padding: "0px 14px",
+                    MozAppearance: "none",
+                    WebkitAppearance: "none",
+                    appearance: "none",
+                  }}
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <option value="">Pilih Status</option>
+                  {listStatus.map((list: any, idx: number) => {
+                    return (
+                      <option value={idx} key={idx}>
+                        {list}
+                      </option>
+                    );
+                  })}
+                </select>
+              </Box>
+            )}
           </Stack>
         </CardContent>
 

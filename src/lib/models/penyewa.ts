@@ -74,4 +74,7 @@ Penyewa.init(
   }
 );
 
+Penyewa.belongsTo(User, { foreignKey: "nama" });
+User.hasOne(Penyewa, { foreignKey: "nama" });
+
 export default Penyewa;

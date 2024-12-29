@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
+    const search = url.searchParams.get("search") || "";
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
@@ -19,10 +20,13 @@ export async function GET(request: Request) {
 
     const offset = (page - 1) * limit;
 
-    const dataPenyewa = await Penyewa.findAll();
+    const dataPenyewa = await Penyewa.findAll({
+      where: {},
+    });
     const dataBangunan = await Bangunan.findAll();
     const dataKamar = await Kamar.findAll();
     const data = await Transaksi.findAndCountAll({
+      where: {},
       limit,
       offset,
       order: [["id", "DESC"]],

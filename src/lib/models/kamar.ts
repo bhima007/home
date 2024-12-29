@@ -52,7 +52,4 @@ Kamar.init(
   }
 );
 
-Kamar.belongsTo(Bangunan, { foreignKey: "bangunan" });
-Bangunan.hasMany(Kamar, { foreignKey: "bangunan" });
-
 export default Kamar;

@@ -31,6 +31,7 @@ export default function CustomTable({
   DataItems,
   setPage,
   noHeader,
+  setDialogEdit,
 }: {
   title: any;
   page?: any;
@@ -41,6 +42,7 @@ export default function CustomTable({
   setPage?: any;
   actionDelete?: any;
   noHeader?: boolean;
+  setDialogEdit?: any;
 }) {
   const [auth, setAuth] = React.useState<any>({});
 
@@ -104,7 +106,7 @@ export default function CustomTable({
             <Typography fontSize={16} fontWeight={700}>
               List {title}
             </Typography>
-            {auth.role == "ADMIN" && (
+            {auth.role == "ADMIN" || title.toLowerCase() == "pengaduan" ? (
               <Button
                 variant="contained"
                 component={Link}
@@ -115,6 +117,8 @@ export default function CustomTable({
               >
                 Tambah Data
               </Button>
+            ) : (
+              ""
             )}
           </CardContent>
           <Divider />
@@ -177,6 +181,14 @@ export default function CustomTable({
                                   : "master"
                               }/${title.toLowerCase()}/${data.id}`}
                             >
+                              <IconPencil size={16}></IconPencil>
+                            </IconButton>
+                          )}
+                      </Tooltip>
+                      <Tooltip title="Edit Data">
+                        {title.toLowerCase() == "transaksi" &&
+                          auth.role == "ADMIN" && (
+                            <IconButton onClick={() => setDialogEdit(data.id)}>
                               <IconPencil size={16}></IconPencil>
                             </IconButton>
                           )}

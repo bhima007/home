@@ -62,7 +62,7 @@ Transaksi.init(
       },
     },
     nominal: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DECIMAL(12, 2),
       allowNull: false,
     },
     periode_pembayaran: {
@@ -80,5 +80,14 @@ Transaksi.init(
     timestamps: true,
   }
 );
+
+Transaksi.belongsTo(Penyewa, { foreignKey: "penyewa" });
+Penyewa.hasMany(Transaksi, { foreignKey: "penyewa" });
+
+Transaksi.belongsTo(Kamar, { foreignKey: "kamar" });
+Kamar.hasMany(Transaksi, { foreignKey: "kamar" });
+
+Transaksi.belongsTo(Bangunan, { foreignKey: "bangunan" });
+Bangunan.hasMany(Transaksi, { foreignKey: "bangunan" });
 
 export default Transaksi;
