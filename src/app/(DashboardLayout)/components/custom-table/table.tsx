@@ -108,7 +108,22 @@ export default function CustomTable({
             <Typography fontSize={16} fontWeight={700}>
               List {title}
             </Typography>
-            {auth.role == "ADMIN" || title.toLowerCase() == "pengaduan" ? (
+            {auth.role == "ADMIN" ? (
+              title.toLowerCase() == "pengaduan" ? (
+                ""
+              ) : (
+                <Button
+                  variant="contained"
+                  component={Link}
+                  href={`${title.toLowerCase()}/tambah`}
+                  disableElevation
+                  color="secondary"
+                  sx={{ color: "white" }}
+                >
+                  Tambah Data
+                </Button>
+              )
+            ) : title.toLowerCase() == "pengaduan" ? (
               <Button
                 variant="contained"
                 component={Link}

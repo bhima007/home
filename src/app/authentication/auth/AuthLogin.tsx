@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Typography, Button, Stack, InputBase } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  Stack,
+  InputBase,
+  CircularProgress,
+} from "@mui/material";
 
 import CustomTextField from "@/app/(DashboardLayout)/components/forms/theme-elements/CustomTextField";
 
@@ -91,7 +98,11 @@ const AuthLogin = ({
             type="submit"
             disabled={isLoading}
           >
-            <span style={{ color: "white" }}>LOGIN</span>
+            {isLoading ? (
+              <CircularProgress sx={{ color: "white" }}></CircularProgress>
+            ) : (
+              <span style={{ color: "white" }}>LOGIN</span>
+            )}
           </Button>
         </Box>
       </form>
